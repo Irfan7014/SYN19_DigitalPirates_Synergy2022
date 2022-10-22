@@ -7,7 +7,7 @@ import { LoginComponent } from '../login/login.component';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AllServiceService {
   isLoggedIn: boolean = false;
   constructor(
     private http: HttpClient,
@@ -120,4 +120,7 @@ export class AuthServiceService {
       duration: 4000,
     });
   }
+
+
+
 }

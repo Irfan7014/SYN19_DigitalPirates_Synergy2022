@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AuthServiceService } from '../services/auth-service.service';
+import { AllServiceService } from '../services/all-service.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   isValidPassword:boolean = false;
   isValidUsername:boolean=false;
   constructor(
-    private authservice: AuthServiceService,
+    private allservice: AllServiceService,
     private snackBar: MatSnackBar,
     private route:Router
   ) { }
@@ -34,13 +34,13 @@ export class LoginComponent implements OnInit {
   login() {
     let returnValue;
     if(this.isValidUsername && this.isValidPassword){
-      this.authservice.login(parseInt(this.username), this.password).subscribe((res) => {
+      this.allservice.login(parseInt(this.username), this.password).subscribe((res) => {
         returnValue = res.body ? res.body : '';
         if (res.status == 200) {
           this.showSnackBar('Login successful','sucess');
-          this.authservice.isLoggedIn = true;
-          this.authservice.saveTokenToLocalstorage(returnValue, this.username, this.password);
-          this.authservice.fetchUserDetails(JSON.parse(JSON.stringify(returnValue))['access_token']); 
+          this.allservice.isLoggedIn = true;
+          this.allservice.saveTokenToLocalstorage(returnValue, this.username, this.password);
+          this.allservice.fetchUserDetails(JSON.parse(JSON.stringify(returnValue))['access_token']); 
         }
       },(err: Error) => {
             console.log(err);
