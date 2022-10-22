@@ -1,1 +1,39 @@
-<p>login works!</p>
+<app-header></app-header>
+<div id="loginContainer">
+    <mat-card>
+        <div class="login-flex-container">
+            <div class="login-column">
+                <h1>Login!</h1>
+                <div class="form-field">
+                    <label class="label-field">Username<span style="color:crimson;">*</span></label>
+                    <input class="username-input-field" id="username" [(ngModel)]="this.username"
+                        (ngModelChange)="validateUsername()" />
+                    <mat-icon matTooltip="Valid Username" class="check-icon" *ngIf="isValidUsername">check
+                    </mat-icon>
+                    <mat-icon matTooltip="Invalid Username" class="wrong-icon" *ngIf="!isValidUsername">cancel
+                    </mat-icon>
+                </div>
+                <div class="form-field">
+                    <label class="label-field">Password<span style="color:crimson;">*</span></label>
+                    <input [type]="hide ? 'password' : 'text'" class="password-input-field" [(ngModel)]="this.password"
+                        (ngModelChange)="validatePassword()">
+                    <mat-icon matSuffix class="visibility-icon"
+                        matTooltip="Invalid Password (It must contain a special character, 1 number, 1 uppercase and 1 lowercase character)"
+                        (click)="hide = !hide" [ngStyle]="{'color': (isValidPassword) ? 'green': 'crimson'}">{{hide ?
+                        'visibility_off' :
+                        'visibility'}}</mat-icon>
+                </div>
+                <div class="buttons-field">
+                    <button mat-stroked-button color="primary" id="cancel-btn" (click)="cancelLogin()">Cancel</button>
+                    <button mat-raised-button color="primary" id="login-btn" (click)="login()">Login</button>
+
+                </div>
+            </div>
+            <div>
+                <img style="height:335px; margin-left:20px;" src="../../assets/documents-gif.gif" alt="Login GIF" />
+            </div>
+        </div>
+        <p class="cllg-address">Fr. Conceicao Rodrigues College Of Engineering, Fr. Agnel Ashram, Bandstand, Bandra(W) Mumbai 400 050 </p>
+    </mat-card>
+</div>
+<app-footer></app-footer>
