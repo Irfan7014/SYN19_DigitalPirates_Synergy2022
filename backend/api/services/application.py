@@ -23,6 +23,14 @@ async def create_application_service(db, application):
     created_application = await db["applications"].find_one({"_id": new_application.inserted_id})
     return created_application
 
+async def update_application_service(db, id, application):
+    update_result = await db["applications"].update_one({"_id": id}, {"$set": application})
+    if update_result.modified_count == 1:
+        update_application = await db["applications"].find_one({"_id": id})
+        if update_application is not None:
+                return update_application
+    return None
+    
 async def get_application_by_id_service(db, id):
     application = await db["applications"].find_one({"_id": id})
     return application

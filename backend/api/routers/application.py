@@ -19,6 +19,7 @@ from api.services.user import get_user_service
 from api.models.application import ApplicationModel
 from api.services.application import create_application_service
 from api.services.application import store_documents
+from api.services.application import update_application_service, get_application_by_id_service
 
 application = APIRouter()
 
@@ -74,4 +75,55 @@ async def new_application(
             comment = comment
         ))
     created_application = await create_application_service(db, application)
-    return created_application
+    return 
+    
+@application.post('/changeStatus/{id}')
+async def change_application_status(
+        id = Query(...),
+        status = Query(...),
+        comment = Query(None),
+        db = Depends(get_db),
+        current_user: CurrentUser = Depends(get_current_user)
+    ):
+
+    if current_user.claims == 'tpc':
+        application = {}
+        application['tpcStatus'] = status
+        if comment is not None:
+            application['comment'] = comment
+        if status == 'Approved':
+            appl = await get_application_by_id_service(db, id)
+            user = await get_user_service(db, int(appl['userid']))
+            #send notif
+        update_application = await update_application_service(db, id, application)
+        return update_application
+
+    if current_user.claims == 'tpo':
+        application = {}
+        application['tpoStatus'] = status
+        application['issued'] = False
+        if comment is not None:
+            application['comment'] = comment
+        if status == 'Approved':
+            appl = await get_application_by_id_service(db, id)
+            user = await get_user_service(db, int(appl['userid']))
+            #send notif
+        update_application = await update_application_service(db, id, application)
+        return update_application
+
+    if current_user.claims == 'admin':
+        application = {}
+        if status == "Issued":
+            application['issued'] = True
+        if comment is not None:
+            application['comment'] = comment
+        if status == 'Issued':
+            appl = await get_application_by_id_service(db, id)
+            if appl['issued'] != True:
+                application['dateOfIssue'] = datetime.today()
+            user = await get_user_service(db, int(appl['userid']))
+            #send notif
+        update_application = await update_application_service(db, id, application)
+        return update_application
+
+    return 'No admin priveleges'
