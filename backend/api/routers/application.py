@@ -53,8 +53,8 @@ async def new_application(
         requiredDocumentsFile: List[UploadFile] = File(...), 
         requiredDocumentsName: List[str] = Form(...),
         comment : str = Form(...),
-        copies: int = Form(...),
-        cgpa: float = Form(...),
+        copies: str = Form(...),
+        cgpa: str = Form(...),
         db = Depends(get_db),
         s3 = Depends(get_s3),
         current_user: CurrentUser = Depends(get_current_user)

@@ -16,8 +16,8 @@ class ApplicationModel(BaseModel):
     tpoStatus : str = Field(...)
     requiredDocments: Dict[str, str] = Field(...)
     dateOfApplication: date = Field(...)
-    copies: int = Field(...)
-    cgpa: float = Field(...)
+    copies: str = Field(...)
+    cgpa: str = Field(...)
     issued: bool = Field(...)
     comment : Optional[str] = Field(...)
 
