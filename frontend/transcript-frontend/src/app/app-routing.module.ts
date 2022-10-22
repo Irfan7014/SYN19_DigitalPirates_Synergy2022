@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminTpoComponent } from './admin/admin-tpo/admin-tpo.component';
 import { ApplyTranscriptComponent } from './apply-transcript/apply-transcript.component';
 import { LoginComponent } from './login/login.component';
 import { NotAuthorisedComponent } from './not-authorised/not-authorised.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 const routes: Routes = [
   {
@@ -19,12 +19,12 @@ const routes: Routes = [
     component: NotAuthorisedComponent,
   },
   {
-    path: 'transcriptRegistration',
-    component: ApplyTranscriptComponent,
+    path:'dashboard/:id',
+    component:UserDashboardComponent,
   },
   {
-    path: 'admin-tpo',
-    component: AdminTpoComponent,
+    path: 'transcriptRegistration',
+    component: ApplyTranscriptComponent,
   },
 ];
 

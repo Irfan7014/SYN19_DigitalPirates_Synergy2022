@@ -2,11 +2,13 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+
 import { environment } from 'src/environments/environment';
 import { LoginComponent } from '../login/login.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AllServiceService {
   isLoggedIn: boolean = false;
@@ -14,9 +16,10 @@ export class AllServiceService {
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar,
+    private route: Router
   ) {}
-  login(username:number, password:string){
-    var url = environment.SERVER_BASE_URL+"api/v1/token"
+  login(username: number, password: string) {
+    var url = environment.SERVER_BASE_URL + 'api/v1/token';
     const body = new HttpParams()
       .set('username', username)
       .set('password', password);
@@ -40,8 +43,8 @@ export class AllServiceService {
     );
     localStorage.setItem('TranscriptRefreshToken', dataToPut['refresh_token']);
   }
-  async fetchUserDetails(accessToken:string){
-    if(typeof accessToken !== 'undefined'){
+  async fetchUserDetails(accessToken: string) {
+    if (typeof accessToken !== 'undefined') {
       accessToken = this.storeAuthTokens();
     }
     await this.http
@@ -69,7 +72,7 @@ export class AllServiceService {
           }
         },
         (err) => {
-          this.showSnackBar('Cannot fetch your details! Try again')
+          this.showSnackBar('Cannot fetch your details! Try again');
         }
       );
   }
@@ -93,7 +96,10 @@ export class AllServiceService {
       .subscribe(
         (res) => {
           if (res.status == 200) {
-            if(localStorage.getItem('TranscriptUsername')==null || localStorage.getItem('TranscriptUsername')==undefined){
+            if (
+              localStorage.getItem('TranscriptUsername') == null ||
+              localStorage.getItem('TranscriptUsername') == undefined
+            ) {
               var dataToPut = JSON.parse(JSON.stringify(res.body));
               localStorage.setItem('TranscriptLoggedIn', 'true');
               localStorage.setItem('TranscriptPass', password);
@@ -102,9 +108,12 @@ export class AllServiceService {
                 'TranscriptAccessToken',
                 'Bearer ' + dataToPut['access_token']
               );
-              localStorage.setItem('TranscriptRefreshToken', dataToPut['refresh_token']);
+              localStorage.setItem(
+                'TranscriptRefreshToken',
+                dataToPut['refresh_token']
+              );
             }
-        }
+          }
           return null;
         },
         (err) => {
@@ -154,6 +163,20 @@ export class AllServiceService {
     );
   }
 
+  async getUserApplications(username:string):Promise<Observable<any>> {
+    if(typeof this.accessToken !== 'undefined'){
+      this.accessToken = this.storeAuthTokens();
+    }
+    const headers= new HttpHeaders()
+  .set('accept', 'application/json')
+  .set('Authorization', this.accessToken ? this.accessToken : '');
+ 
+    return this.http.get<Response>(environment.SERVER_BASE_URL+'api/v1/getApplicationByUser', {
+      headers: headers,
+      params: new HttpParams().set('userid', username),
+    });
+    
+  }
 
   showSnackBar(message:string){
     this.snackBar.open(message, 'Close', {
@@ -163,6 +186,42 @@ export class AllServiceService {
     });
   }
 
+  getAllApplications() {
+    var url = environment.SERVER_BASE_URL + 'api/v1/getAllApplications';
+    var bearerToken = localStorage.getItem('TranscriptAccessToken')!;
+    return this.http.get(url, {
+      headers: new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .set('Authorization', bearerToken),
+      observe: 'response',
+    });
+  }
 
+  getUserByUserId(userId: Number) {
+    var url = environment.SERVER_BASE_URL + 'api/v1/getUserById';
+    var bearerToken = localStorage.getItem('TranscriptAccessToken')!;
+    const params = new HttpParams().set('id', userId.toString());
+    return this.http.get(url, {
+      params: params,
+      headers: new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .set('Authorization', bearerToken),
+      observe: 'response',
+    });
+  }
+
+  changeStatus(_id: string) {
+    var url = environment.SERVER_BASE_URL + 'api/v1/getUserById';
+    var bearerToken = localStorage.getItem('TranscriptAccessToken')!;
+    const params = new HttpParams().set('id', _id).set('status', 'Approved');
+
+    return this.http.post(url, {
+      params: params,
+      headers: new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .set('Authorization', bearerToken),
+      observe: 'response',
+    });
+  }
 
 }

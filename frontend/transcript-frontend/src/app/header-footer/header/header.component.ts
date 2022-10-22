@@ -8,12 +8,14 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   isLoggedIn:boolean = false;
   role: string|null = '';
+  username!:string;
   constructor(private route: Router) { }
 
   ngOnInit(): void {
     this.role = localStorage.getItem('TranscriptRole');
     if (localStorage.getItem('TranscriptLoggedIn')) {
       this.isLoggedIn = true;
+      this.username = localStorage.getItem('TranscriptUsername')!;
     }
   }
   goToHomePage():void{

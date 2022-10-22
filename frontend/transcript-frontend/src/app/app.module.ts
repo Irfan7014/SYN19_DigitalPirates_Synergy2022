@@ -31,6 +31,7 @@ import { FooterComponent } from './header-footer/footer/footer.component';
 import { AdminTpoComponent } from './admin/admin-tpo/admin-tpo.component';
 import { ApplyTranscriptComponent } from './apply-transcript/apply-transcript.component';
 import { NotAuthorisedComponent } from './not-authorised/not-authorised.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +41,7 @@ import { NotAuthorisedComponent } from './not-authorised/not-authorised.componen
     AdminTpoComponent,
     ApplyTranscriptComponent,
     NotAuthorisedComponent,
+    UserDashboardComponent,
   ],
   imports: [
     BrowserModule,

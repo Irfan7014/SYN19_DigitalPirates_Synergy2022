@@ -1,0 +1,54 @@
+<app-header></app-header>
+<!-- Table -->
+<h1 style="text-align:center; padding: 20px 0;">MY APPLICATIONS</h1>
+<table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8 demo-table" *ngIf="isLoadingResults">
+    <!-- Position Column -->
+
+    <!-- <ng-container matColumnDef="demo-position">
+      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <td mat-cell *matCellDef="let i"> {{i+1}} </td>
+    </ng-container> -->
+  
+    <!-- Date Applied Column -->
+    <ng-container matColumnDef="dateApplied">
+      <th mat-header-cell *matHeaderCellDef> Date Applied </th>
+      <td mat-cell *matCellDef="let element"> {{element.dateApplied}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="documentsUploaded">
+        <th mat-header-cell *matHeaderCellDef> Documents Uploaded </th>
+        <td mat-cell *matCellDef="let element"> 
+            <ul *ngFor="let docs of element.documentsUploaded"><li><a href={{docs.link}}>{{docs.name}}</a></li></ul> 
+        </td>
+      </ng-container>  
+    <!-- TPC Column -->
+    <ng-container matColumnDef="tpcStatus">
+      <th mat-header-cell *matHeaderCellDef> TPC STATUS </th>
+      <td mat-cell *matCellDef="let element"> {{element.tpcStatus}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tpoStatus">
+        <th mat-header-cell *matHeaderCellDef> TPO STATUS </th>
+        <td mat-cell *matCellDef="let element"> {{element.tpoStatus}} </td>
+      </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="paid">
+      <th mat-header-cell *matHeaderCellDef> PAY FEES </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-flat-button class="pay-fee-btn-1" *ngIf="element.paid=='PAY NOW'" (click)="payOnline(element._id)">PAY ONLINE</button>
+        <button mat-flat-button class="pay-fee-btn-2" *ngIf="element.paid=='PAY NOW'" (click)="payOffline(element._id)">PAY OFFLINE</button>
+        <button mat-stroked-button class="paid-fee" *ngIf="element.paid=='PAID'" disabled>PAID</button> 
+    </td>
+    </ng-container>
+
+    <ng-container matColumnDef="issued">
+        <th mat-header-cell *matHeaderCellDef> ISSUED </th>
+        <td mat-cell *matCellDef="let element"> {{element.issued}} </td>
+      </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<app-footer></app-footer>
