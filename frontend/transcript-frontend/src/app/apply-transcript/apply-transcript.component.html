@@ -1,0 +1,158 @@
+<app-header></app-header>
+<div class="application-form">
+    <mat-card class="transcript-form-heading">Transcript Application</mat-card>
+    <mat-tab-group #applicationTabGroup mat-stretch-tabs mat-align-tabs="center" animationDuration="0ms" class="mat-elevation-z4">
+        <mat-tab class="tab-class" label="APPLICATION FORM" disabled>
+            <div class="actual-form">
+                <div class="flex-form">
+                    <div>
+                        <div class="flex-form">
+                            <div class="name-form-field">
+                                <label class="label-field">Name<span style="color:crimson;">*</span></label>
+                                <input type="text" class="form-input-field" [(ngModel)]="this.name" [value]="this.name" placeholder="Name" disabled/>
+                            </div>
+                            <div class="aadhaar-form-field">
+                                <label class="label-field">Roll Number<span style="color:crimson;">*</span></label>
+                                <input type="string++" class="form-input-field" [(ngModel)]="this.rollno" [value]="this.rollno" disabled placeholder="Roll Number"/>
+                            </div>
+                        </div>
+                        <div class="flex-form">
+                            <div class="phone-form-field">
+                                <label class="label-field">Phone Number<span style="color:crimson;">*</span></label>
+                                <input type="number" class="form-input-field" [(ngModel)]="this.phoneNo" [value]="this.phoneNo" placeholder="Phone Number" disabled/>
+                            </div>
+                            <div class="email-form-field">
+                                <label class="label-field">Email Id<span style="color:crimson;">*</span></label>
+                                <input type="text" class="form-input-field" [(ngModel)]="this.email" [value]="this.email" placeholder="Email Id" disabled/>
+                            </div>
+                        </div>
+                        <div class="flex-form">
+                            <div class="yoa-form-field">
+                                <label class="label-field">Year of Admission<span style="color:crimson;">*</span></label>
+                                <input type="number" class="form-input-field" [(ngModel)]="this.yearOfAdmission" [value]="this.yearOfAdmission" placeholder="Year Of Admission" disabled/>
+                            </div>
+                            <div class="flex-form">
+                                <div class="branch-form-field">
+                                    <label class="label-field">BRANCH<span style="color:crimson;">*</span></label>
+                                    <input type="text" class="form-input-field" [(ngModel)]="this.branch" [value]="this.branch" placeholder="Branch" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-form">
+                            
+                            <div class="flex-form">
+                                <div class="branch-form-field">
+                                    <label class="label-field">COPIES NEEDED<span style="color:crimson;">*</span></label>
+                                    <input type="number" class="form-input-field" [(ngModel)]="this.copies" [value]="this.copies" placeholder="(including original)" (ngModelChange)="onCopiesChanged()"/>
+                                    <mat-icon matSuffix matTooltip="Valid Copies" class="check-icon" *ngIf="isValidCopies">check
+                                    </mat-icon>
+                                    <mat-icon matSuffix matTooltip="Invalid Copies" class="wrong-icon" *ngIf="!isValidCopies">cancel
+                                    </mat-icon>
+                                </div>
+                            </div>
+                            <div class="cgpa-form-field">
+                                <label class="label-field">CGPA (Till now)</label>
+                                <input type="text" class="form-input-field" [(ngModel)]="this.cgpa" [value]="this.cgpa" placeholder="Enter CGPA" (ngModelChange)="onCGPAChanged()"/>
+                                <mat-icon matSuffix matTooltip="Valid CGPA" class="check-icon" *ngIf="isValidCGPA">check
+                                </mat-icon>
+                                <mat-icon matSuffix matTooltip="Invalid CGPA" class="wrong-icon" *ngIf="!isValidCGPA">cancel
+                                </mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="photo-form-field">
+                            <label for="camera-button">
+                                <img [src]="this.photoSource==null ?'../../assets/user-icon.png':this.photoSource" alt="Photo with white background" height="250px" width="250px" class="display-image"/>
+                            </label>
+                            <input id="camera-button" #imageInput type="file" accept="image/*" (change)="processFile(imageInput)" hidden />
+                            <h6 class="photo-name">Passport size photo<span style="color:crimson;">*</span></h6>                
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-flex-form">
+                    <button mat-stroked-button class="cancel-form-button" (click)="cancelApplication()">CANCEL</button>
+                    <button mat-flat-button class="submit-form-button" (click)="submitPersonalDetailsForm(applicationTabGroup)">CONFIRM</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab class="tab-class" label="UPLOAD MARKSHEETS" disabled>
+            <div class="document-form">
+                <div class="document-divs-row-1">
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-I MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded1" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded1" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput1 type="file" accept=".pdf" (change)="processSemFile1(semInput1)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded1" class="file-name">{{this.semFileName1}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput1.click()">UPLOAD</button>
+                    </div>
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-II MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded2" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded2" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput2 type="file" accept=".pdf" (change)="processSemFile2(semInput2)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded2" class="file-name">{{this.semFileName2}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput2.click()">UPLOAD</button>
+                    </div>
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-III MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded3" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded3" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput3 type="file" accept=".pdf" (change)="processSemFile3(semInput3)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded3" class="file-name">{{this.semFileName3}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput3.click()">UPLOAD</button>
+                    </div>
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-IV MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded4" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded4" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput4 type="file" accept=".pdf" (change)="processSemFile4(semInput4)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded4" class="file-name">{{this.semFileName4}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput4.click()">UPLOAD</button>
+                    </div>
+                </div>
+                <div class="document-divs-row-2">
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-V MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded5" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded5" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput5 type="file" accept=".pdf" (change)="processSemFile5(semInput5)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded5" class="file-name">{{this.semFileName5}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput5.click()">UPLOAD</button>
+                    </div>
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-VI MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded6" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded6" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput6 type="file" accept=".pdf" (change)="processSemFile6(semInput6)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded6" class="file-name">{{this.semFileName6}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput6.click()">UPLOAD</button>
+                    </div>
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-VII MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded7" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded7" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput7 type="file" accept=".pdf" (change)="processSemFile7(semInput7)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded7" class="file-name">{{this.semFileName7}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput7.click()">UPLOAD</button>
+                    </div>
+                    <div class="doc-form-field">
+                        <label class="image-label-field">SEM-VIII MARKSHEET</label>
+                        <img *ngIf="this.semNotUploaded8" src="../../../assets/cloud-upload.png" height="85px" width="80px" style="display:block; margin:0 auto 15px;"/>
+                        <img *ngIf="!this.semNotUploaded8" src="../../../assets/pdf-file.png" height="100px" width="80px" style="display:block; margin:auto;"/>
+                        <input #semInput8 type="file" accept=".pdf" (change)="processSemFile8(semInput8)" hidden>
+                        <h6 *ngIf="!this.semNotUploaded8" class="file-name">{{this.semFileName8}}</h6>
+                        <button mat-stroked-button class="doc-upload-button" (click)="semInput8.click()">UPLOAD</button>
+                    </div>
+                </div>
+                <div class="button-flex-form">
+                    <button mat-stroked-button class="cancel-form-button" (click)="cancelTranscriptForm(applicationTabGroup)">BACK</button>
+                    <button mat-flat-button class="submit-form-button" (click)="applyTranscriptForm()">APPLY</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+<app-footer></app-footer>

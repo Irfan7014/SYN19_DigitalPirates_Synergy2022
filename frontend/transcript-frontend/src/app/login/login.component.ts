@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
   }
   validateUsername():boolean{
     var validRegex = /^\d{4,5}$/;
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit {
           this.showSnackBar('Login successful','sucess');
           this.allservice.isLoggedIn = true;
           this.allservice.saveTokenToLocalstorage(returnValue, this.username, this.password);
-          this.allservice.fetchUserDetails(JSON.parse(JSON.stringify(returnValue))['access_token']); 
+          this.allservice.fetchUserDetails(JSON.parse(JSON.stringify(returnValue))['access_token']);
+          this.route.navigate(['dashboard',this.username]); 
         }
       },(err: Error) => {
             console.log(err);
