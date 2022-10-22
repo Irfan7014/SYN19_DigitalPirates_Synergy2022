@@ -1,0 +1,94 @@
+<p>admin-tpo works!</p>
+<app-header></app-header>
+
+<!-- Filter -->
+<mat-card class="search-field">
+    <table cellspacing="0px">
+        <tr>
+            <td>
+                <mat-form-field appearance="fill">
+                    <mat-label>Status</mat-label>
+                    <mat-select placeholder="Select Status..." (selectionChange)="applyStatusFilter($event)" #input>
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let type of types" [value]="type">
+                            {{ type }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+</mat-card>
+
+<!-- Table -->
+<mat-card *ngIf="isLoadingResults" class="loadingResults" #port>No Organizers Present
+</mat-card>
+<div class="container">
+    <div class="mat-elevation-z8" [hidden]="isLoadingResults">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>No.</th>
+                <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+            <ng-container matColumnDef="userid">
+                <th mat-header-cell *matHeaderCellDef>Roll No.</th>
+                <td mat-cell *matCellDef="let element">{{ element.userid }}</td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+            </ng-container>
+            <ng-container matColumnDef="requiredDocuments">
+                <th mat-header-cell *matHeaderCellDef>Document</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-button (click)="openDialog(element)">View Document</button>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="tpcStatus">
+                <th mat-header-cell *matHeaderCellDef>TPC Status</th>
+                <td mat-cell *matCellDef="let element">{{ element.tpcStatus }}</td>
+            </ng-container>
+            <ng-container matColumnDef="tpoStatus">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let element">
+
+                    <button *ngIf="element.tpoStatus == 'In Progress'; else verified" mat-raised-button [ngStyle]="{
+              'background-color':
+                'rgb(240, 100, 68)'
+                  
+            }">
+                        In Progress
+                    </button>
+                    <ng-template #verified>
+                        <button mat-raised-button disabled [ngStyle]="{
+                                  'background-color':
+                                    'rgb(50,205,50)',
+                                    'color':'white'
+                                }">
+                            Approved
+                        </button>
+                    </ng-template>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <!-- <tr mat-row (click)="openDialog(row)" *matRowDef="let row; columns: displayedColumns"></tr> -->
+            <!-- <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell validcolor" colspan="4">
+                    No data matching the filter {{ port.value }}
+                </td>
+                <td class="mat-cell validcolor" colspan="4">
+                    No data matching the filter {{ input.value }}
+                </td>
+            </tr> -->
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" aria-label="Select page of users">
+        </mat-paginator>
+    </div>
+</div>
+
+<app-footer></app-footer>

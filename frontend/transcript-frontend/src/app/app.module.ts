@@ -28,12 +28,14 @@ import {  MatTooltipModule } from '@angular/material/tooltip';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { HeaderComponent } from './header-footer/header/header.component';
 import { FooterComponent } from './header-footer/footer/footer.component';
+import { AdminTpoComponent } from './admin/admin-tpo/admin-tpo.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HeaderComponent,
     FooterComponent,
+    AdminTpoComponent,
   ],
   imports: [
     BrowserModule,
