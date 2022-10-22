@@ -11,12 +11,19 @@ export class HeaderComponent implements OnInit {
   constructor(private route: Router) { }
 
   ngOnInit(): void {
-    this.role = localStorage.getItem('Role');
-    if (localStorage.getItem('LoggedIn')) {
+    this.role = localStorage.getItem('TranscriptRole');
+    if (localStorage.getItem('TranscriptLoggedIn')) {
       this.isLoggedIn = true;
     }
   }
-
+  goToHomePage():void{
+    if(this.role=='student'){
+      this.route.navigate(['/dashboard',localStorage.getItem('TranscriptUsername')]);
+    }
+  }
+  goToApplicationPage(){
+    this.route.navigate(['/transcriptRegistration']);
+  }
   goToRegistrationPage() {
     this.route.navigate(['/register']);
   }

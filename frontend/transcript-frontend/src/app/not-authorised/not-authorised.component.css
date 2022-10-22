@@ -1,0 +1,16 @@
+.authorization-msg{
+    color:crimson;
+    text-align: center;
+}
+.container{
+    padding:50px 0;
+}
+.goback-btn{
+    background-color: crimson;
+    color: white;
+    height: 60px;
+    border-radius: 7px;
+    font-size: 24px;
+    margin: 5% 40%;
+    display: inline;
+}

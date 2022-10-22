@@ -29,6 +29,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { HeaderComponent } from './header-footer/header/header.component';
 import { FooterComponent } from './header-footer/footer/footer.component';
 import { AdminTpoComponent } from './admin/admin-tpo/admin-tpo.component';
+import { ApplyTranscriptComponent } from './apply-transcript/apply-transcript.component';
+import { NotAuthorisedComponent } from './not-authorised/not-authorised.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +38,8 @@ import { AdminTpoComponent } from './admin/admin-tpo/admin-tpo.component';
     HeaderComponent,
     FooterComponent,
     AdminTpoComponent,
+    ApplyTranscriptComponent,
+    NotAuthorisedComponent,
   ],
   imports: [
     BrowserModule,

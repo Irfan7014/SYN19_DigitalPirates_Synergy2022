@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginComponent } from '../login/login.component';
 
@@ -9,6 +10,7 @@ import { LoginComponent } from '../login/login.component';
 })
 export class AllServiceService {
   isLoggedIn: boolean = false;
+  accessToken:string = "";
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar,
@@ -36,7 +38,7 @@ export class AllServiceService {
       'TranscriptAccessToken',
       'Bearer ' + dataToPut['access_token']
     );
-    localStorage.setItem('TrasncriptRefreshToken', dataToPut['refresh_token']);
+    localStorage.setItem('TranscriptRefreshToken', dataToPut['refresh_token']);
   }
   async fetchUserDetails(accessToken:string){
     if(typeof accessToken !== 'undefined'){
@@ -53,17 +55,17 @@ export class AllServiceService {
         (res) => {
           var dataToPut = JSON.parse(JSON.stringify(res.body));
           if (dataToPut['verified'] == true) {
-            localStorage.setItem('TrasncriptName', dataToPut['name']);
-            localStorage.setItem('TrasncriptGender', dataToPut['gender']);
-            localStorage.setItem('TrasncriptPhone', dataToPut['phone']);
-            localStorage.setItem('TrasncriptEmail', dataToPut['email']);
-            localStorage.setItem('TrasncriptRole', dataToPut['role']);
-            localStorage.setItem('TrasncriptPass', dataToPut['password']);
-            localStorage.setItem('TrasncriptVerified', dataToPut['verified']);
-            localStorage.setItem('TrasncriptUsername', dataToPut['userid']);
-            localStorage.setItem('Trasncript_id', dataToPut['_id']);
-            localStorage.setItem('TrasncriptBranch', dataToPut['branch']);
-            localStorage.setItem('TrasncriptJoin', dataToPut['joining']);
+            localStorage.setItem('TranscriptName', dataToPut['name']);
+            localStorage.setItem('TranscriptGender', dataToPut['gender']);
+            localStorage.setItem('TranscriptPhone', dataToPut['phone']);
+            localStorage.setItem('TranscriptEmail', dataToPut['email']);
+            localStorage.setItem('TranscriptRole', dataToPut['role']);
+            localStorage.setItem('TranscriptPass', dataToPut['password']);
+            localStorage.setItem('TranscriptVerified', dataToPut['verified']);
+            localStorage.setItem('TranscriptUsername', dataToPut['userid']);
+            localStorage.setItem('Transcript_id', dataToPut['_id']);
+            localStorage.setItem('TranscriptBranch', dataToPut['branch']);
+            localStorage.setItem('TranscriptJoin', dataToPut['joining']);
           }
         },
         (err) => {
@@ -112,6 +114,46 @@ export class AllServiceService {
       );
     return localStorage.getItem('TranscriptAccessToken')!;
   }
+
+  applyForTranscript(
+    docs: File[],
+    requiredDocumentsName: string[],
+    comment: string="",
+    copies:number=0,
+    cgpa: string
+  ): Observable<any> {
+
+    this.accessToken = localStorage.getItem('TranscriptAccessToken')!;
+    let formData = new FormData();
+    formData.append('cgpa', cgpa);
+    console.log(docs.length);
+    console.log(requiredDocumentsName);
+    for (let file of docs) {
+      formData.append('requiredDocumentsFile', file);
+    }
+    for (let name of requiredDocumentsName) {
+      formData.append('requiredDocumentsName', name);
+    }
+    formData.append('copies', copies.toString());
+    formData.append('comment', comment);
+    console.log(formData.getAll('requiredDocumentsName'));
+    console.log(formData.getAll('copies'));
+    console.log(formData.getAll('cgpa'));
+    console.log(formData.getAll('comment'));
+    console.log(formData.getAll('requiredDocumentsFile'));
+    console.log(formData);
+
+    return this.http.post(
+      environment.SERVER_BASE_URL + 'api/v1/newApplication',
+      formData,
+      {
+        headers: new HttpHeaders()
+          .set('accept', 'application/json')
+          .set('Authorization', this.accessToken ? this.accessToken : ''),
+      }
+    );
+  }
+
 
   showSnackBar(message:string){
     this.snackBar.open(message, 'Close', {
