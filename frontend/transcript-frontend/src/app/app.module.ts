@@ -26,10 +26,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {  MatTooltipModule } from '@angular/material/tooltip';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { HeaderComponent } from './header-footer/header/header.component';
+import { FooterComponent } from './header-footer/footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    HeaderComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

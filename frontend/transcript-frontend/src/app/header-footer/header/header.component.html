@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-header">
+    <div class="container-fluid">
+      <a class="navbar-brand" (click)="clickedLogo()" style="cursor:pointer;"><img
+          src="../../../assets/cllg-logo.png" height="50px" class="logo" /></a>
+      <button class="navbar-toggler navbar-toggle-btn" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-left:auto;">
+          <li class="nav-item">
+            <a class="nav-link navbar-title" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link navbar-title" aria-current="page" href="#">Apply For Transcript</a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link navbar-title" aria-current="page" href="#">View Application Status</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link navbar-title" aria-current="page" href="#">View Application Procedure</a>
+          </li>
+        </ul>
+        <div *ngIf="!isLoggedIn; else logout" class="d-flex">
+          <button mat-stroked-button class="login-button" (click)="goToLoginPage()">Login</button>
+        </div>
+        <ng-template #logout>
+          <button mat-stroked-button class="register-button" (click)="logOut()">Logout</button>
+        </ng-template>
+      </div>
+    </div>
+  </nav>
