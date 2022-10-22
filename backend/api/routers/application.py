@@ -20,6 +20,8 @@ from api.models.application import ApplicationModel
 from api.services.application import create_application_service
 from api.services.application import store_documents
 from api.services.application import update_application_service, get_application_by_id_service
+from api.services.application import create_application_service, get_all_applications_service, store_document
+from api.services.application import update_application_service, get_application_by_id_service, get_application_by_user_service
 
 application = APIRouter()
 
@@ -126,4 +128,53 @@ async def change_application_status(
         update_application = await update_application_service(db, id, application)
         return update_application
 
+    return 'No admin priveleges'
+
+@application.get('/getApplicationById/{id}')
+async def get_application_by_id(
+        id = Query(...),
+        db = Depends(get_db),
+        current_user: CurrentUser = Depends(get_current_user)
+    ):
+    application = await get_application_by_id_service(db, id)
+    return application
+
+
+@application.get('/getApplicationByUser')
+async def get_application_by_user(
+        userid: int = Query(...),
+        db = Depends(get_db),
+        current_user: CurrentUser = Depends(get_current_user)
+    ):
+    application = await get_application_by_user_service(db, userid)
+    return application
+
+@application.patch('/feeUpdate/{id}')
+async def fee_update_application(
+        id = Field(...),
+        feeProof: UploadFile = File(None), 
+        comment : Optional[str] = Form(None),
+        db = Depends(get_db),
+        s3 = Depends(get_s3),
+        current_user: CurrentUser = Depends(get_current_user)
+    ):
+        
+    application = {}
+    if feeProof is not None:
+        url = await store_document(s3, feeProof)
+        application['feeProof'] = url
+    if comment is not None:
+        application['comment'] = comment
+
+    update_application = await update_application_service(db, id, application)
+    return update_application
+
+@application.get('/getAllApplications')
+async def get_all_applications(
+        db = Depends(get_db),
+        current_user: CurrentUser = Depends(get_current_user)
+    ):
+    if current_user.claims == 'tpc' or current_user.claims == 'tpo' or current_user.claims == 'admin':
+        applications = await get_all_applications_service(db)
+        return applications
     return 'No admin priveleges'

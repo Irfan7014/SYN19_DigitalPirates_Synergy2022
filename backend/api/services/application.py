@@ -30,10 +30,15 @@ async def update_application_service(db, id, application):
         if update_application is not None:
                 return update_application
     return None
-    
+
 async def get_application_by_id_service(db, id):
     application = await db["applications"].find_one({"_id": id})
     return application
+
+async def get_all_applications_service(db):
+    users = await db["applications"].find().to_list(1000)
+    return users
+
 
 async def get_application_by_user_service(db, userid):
     application = await db["applications"].find({"userid": userid}).to_list(1000)

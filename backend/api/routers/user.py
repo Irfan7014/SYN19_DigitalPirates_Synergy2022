@@ -68,3 +68,38 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db = Depends(g
     access_token = authHandler().encode_token(_user['userid'], _user['role'])
     refresh_token = authHandler().encode_refresh_token(_user['userid'])
     return JSONResponse(status_code= status.HTTP_200_OK, content={"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"})
+
+@user.get('/getUser')
+async def get_user(db= Depends(get_db), current_user: CurrentUser = Depends(get_current_user)):
+    user = await get_user_service(db, current_user.userid)
+    return user
+
+@user.get('/getUserById')
+async def get_user_by_id(id = Query(...), db= Depends(get_db), current_user: CurrentUser = Depends(get_current_user)):
+    if current_user.claims == 'admin' or current_user.claims == 'tpc' or current_user.claims == 'tpo':
+        users = await get_user_service(db, int(id))
+        return users
+    return 'Not Admin'
+
+@user.get('/getAllUser')
+async def get_all_users(db= Depends(get_db), current_user: CurrentUser = Depends(get_current_user)):
+    if current_user.claims == 'admin' or current_user.claims == 'tpc' or current_user.claims == 'tpo':
+        users = await get_all_users_service(db)
+        return users
+    return 'Not Admin'
+
+@user.patch('/updateUser')
+async def update_user(
+        password: Optional[str] = Query(None),
+        email: Optional[str] = Query(None),
+        db = Depends(get_db),
+        current_user: CurrentUser = Depends(get_current_user)
+    ):
+        
+    user = {}
+    if password is not None:
+        user['password'] = password
+    if email is not None:
+        user['email'] = email    
+    update_user = await update_user_service(db, current_user.userid, user)
+    return update_user
